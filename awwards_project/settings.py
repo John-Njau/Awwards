@@ -55,7 +55,16 @@ INSTALLED_APPS = [
     'awards',
     'bootstrap4',
     'cloudinary',
+    'tinymce',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -174,6 +183,10 @@ STATICFILES_DIRS = [
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
+# redirect on login
+LOGIN_REDIRECT_URL='home'
+LOGOUT_REDIRECT_URL ='/accounts/login/'
 
 
 # configure the location for media
