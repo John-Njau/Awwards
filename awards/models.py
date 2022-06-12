@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
 
 from tinymce.models import HTMLField
 from cloudinary.models import CloudinaryField
@@ -29,7 +31,6 @@ class Project(models.Model):
     # class Meta:
     #     ordering = ['-uploaded_at']
     
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = CloudinaryField('Awards/profiles')
@@ -43,8 +44,8 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
-    
-    
+ 
+# @login_required(login_url='/accounts/login/')   
 class UserContacts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contacts')
     phone_no = models.CharField(max_length=255)
@@ -83,7 +84,8 @@ RATING = (
     (9,'9'),
     (10,'10') 
 )
-    
+
+# @login_required(login_url='/accounts/login/')
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
@@ -103,7 +105,8 @@ class Reviews(models.Model):
     class Meta:
         verbose_name_plural = 'Reviews'
     
-    
+
+# @login_required(login_url='/accounts/login/')
 class Ratings(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='ratings')

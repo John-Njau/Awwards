@@ -10,5 +10,5 @@ admin.site.register(UserContacts)
 admin.site.register(Ratings)
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display= ('user', 'project', 'review', 'review_rating')
+    list_display= ('user', 'project', 'review', 'get_review_rating')
 admin.site.register(Reviews, ReviewAdmin)
