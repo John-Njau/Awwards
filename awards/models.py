@@ -1,3 +1,4 @@
+from unittest import result
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -20,6 +21,12 @@ class Project(models.Model):
         return self.title
     
     
+    @classmethod
+    def search_by_title(cls, search_term):
+        results = cls.objects.filter(title__icontains=search_term)
+        return results
+    
+    
     # class Meta:
     #     ordering = ['-uploaded_at']
     
@@ -28,7 +35,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = CloudinaryField('Awards/profiles')
     bio = models.CharField(max_length=255)
-    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     
     def get_user_projects(self):
@@ -63,12 +70,26 @@ class UserContacts(models.Model):
 #      (4, '4'),
 #      (5, '5'),
 #  )]
+
+# Product Review
+RATING = (
+    (1, '1'),
+    (2,'2'), 
+    (3 ,'3'), 
+    (4,'4'),
+    (5, '5'),
+    (6,'6'),
+    (7,'7'),
+    (8,'8'),
+    (9,'9'),
+    (10,'10') 
+)
     
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
     review = HTMLField()
-    review_rating = models.CharField( choices=[(1, '1'),(2,'2'), (3 ,'3'), (4,'4'),(5, '5') ],max_length=150)
+    review_rating = models.CharField( choices=RATING,max_length=150)
     # created_at = models.DateTimeField(auto_now_add=True)
     
     
