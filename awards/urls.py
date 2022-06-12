@@ -9,13 +9,14 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('search',views.search_results,name='search'),
     # path('profile/<int:profileId>', views.profile, name='profile'),
     # path('update/profile/<int:profileId>', views.updateprofile, name='updateprofile'),
-    path('profile/', views.profile, name='profile'),
+    path('profile/<int:userId>', views.profile, name='profile'),
     path('update/profile/', views.updateprofile, name='updateprofile'),
-    path('project/details/', views.project_details, name='project_details'),
-    path('upload/new', views.upload_project, name='upload_project'),
-    path('add/review/<int:profileId>', views.add_review, name='add_review'),
+    path('upload/project/', views.upload_project, name='upload_project'),
+    path('project/details/<int:id>', views.project_details, name='project_details'),
+    path('add/review/<int:projectId>', views.add_review, name='add_review'),
 ]
 
 # if settings.DEBUG:
