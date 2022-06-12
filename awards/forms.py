@@ -67,5 +67,5 @@ class ProjectReviewForm(forms.ModelForm):
         
         widgets={
             'review':TextInput(attrs={'class': 'form-control'}),
-            'review_rating': TextInput(attrs={'class': 'form-control'})
+            'review_rating': Select(attrs={'class': 'form-control'})
         }
