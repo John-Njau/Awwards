@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% if projects %}
+        <h2>Found {{ projects|length }} projects with '{{message}}' keyword</h2>
+        {%else %}
+        <h2>Found {{ projects|length }} projects with '{{message}}' keyword</h2>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% if projects %}
+        {% for project in projects %}
+        <div class="col-sm-6 col-md-3">
+            <h1>{{project.title}}</h1>
+            <img src="{{project.image.url}}" alt="" class="img-fluid">
+            <a class="btn btn-light m-3" role="button"
+                href="project/details/{{ project.id }}">Details</a>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
