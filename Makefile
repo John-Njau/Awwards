@@ -2,8 +2,8 @@ serve:
 	python manage.py runserver 8000
 
 migrations:
-	python manage.py makemigrations
-	python manage.py migrate
+	python manage.py makemigrations awards
+	python manage.py migrate awards
 
 super:
 	python manage.py createsuperuser
@@ -15,4 +15,4 @@ tests:
 	python manage.py test
 
 check: 
-	python manage.py check instagram
+	python manage.py check awards
