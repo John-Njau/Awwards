@@ -41,7 +41,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MODE = config("MODE", default="dev")
 DEBUG = config("DEBUG", default=False, cast=bool)
-SECRET_KEY = config("SECRET_KEY")
+# SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY='v*mfxbva8+&bw2*l==a73%*mi2j)9#rt%c*vom9v4cyh4=5ya!'
+
 # Application definition
 
 INSTALLED_APPS = [
