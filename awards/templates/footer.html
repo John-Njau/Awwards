@@ -1,24 +1,19 @@
 {% load static %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>AWARDS</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome-free/css/all.min.css' %}" />
-    <!-- Bootstrap 4 CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'bs4/bootstrap.min.css' %}" />
-    <!-- Main Jquery -->
-    <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
-    <!-- Bootstrap 4 JS -->
-    <script type="text/javascript" src="{% static 'bs4/bootstrap.min.js' %}"></script>
-    <!-- CustomJs -->
-    <link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}" />
-    <script type="text/javascript" src="{% static 'custom.js' %}"></script>
+<head>   
+    {% block styles %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+     <!-- Font Awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% endblock %}
 </head>
 
 <body>
-    <footer class="pt-4 my-md-5 pt-md-5 border-top container ">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top container-fluid mx-3 ">
         <div class="row">
             <div class="col-12 col-md">
                 <a href="#">Awwards</a>
@@ -56,5 +51,12 @@
         </div>
     </footer>
 </body>
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+     <!-- CustomJs -->
+     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% bootstrap_javascript %}
+{% endblock %}
 
 </html>
