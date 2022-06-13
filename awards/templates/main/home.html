@@ -35,7 +35,7 @@
     </div>
     <h3 class="text-center mt-5 mb-0">All projects</h3>
     <div class="project-cont">
-       
+
         {% for project in projects%}
         <div class="card ind-project">
             <h3>{{ project.title }}</h3>
@@ -50,7 +50,8 @@
                             project</a> </p>
             </div>
             <div class="card-footer bg-white">
-                <p class=""><strong>By: {{ project.user.username }}</strong></p>
+                <a href="{% url 'other_user_profile' user.id %}" class=""><strong>By:
+                        {{ project.user.username }}</strong></a>
 
             </div>
             <!-- <p>{{ project.description }}</p> -->

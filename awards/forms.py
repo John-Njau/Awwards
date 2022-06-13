@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import TextInput, FileInput, URLInput, EmailInput, PasswordInput, NumberInput, DateInput, TimeInput, CheckboxInput, Select, RadioSelect, Textarea
 
 
-from .models import User, Profile, Project, UserContacts, Reviews
+from .models import User, Profile, Project, UserContacts, Reviews, Ratings
 
 
 class SignupForm(UserCreationForm):
@@ -63,9 +63,17 @@ class UserContactForm(forms.ModelForm):
 class ProjectReviewForm(forms.ModelForm):
     class Meta:
         model = Reviews
-        fields = ['review', 'review_rating']
+        fields = ['review', 'design_rating', 'usability_rating',  'content_rating']
         
         widgets={
             'review':TextInput(attrs={'class': 'form-control'}),
-            'review_rating': Select(attrs={'class': 'form-control'})
         }
+        
+        
+# review form
+class ProjectRatingForm(forms.ModelForm):
+    class Meta:
+        model = Ratings
+        fields = ['design_rating', 'usability_rating',  'content_rating']
+        
+       

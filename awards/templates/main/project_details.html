@@ -10,7 +10,8 @@
                     <h1>{{project.title}}</h1>
                     <img src="{{project.image.url}}" alt="" class="img-fluid">
                     <div class="ml-3 mt-3 p-5">
-                        <h4 class="float-left mt-3 mx-3">By: <strong>{{project.user.username}}</strong> </h4>
+                        <a href="{% url 'other_user_profile' user.id %}" class="float-left mt-3 mx-3 h4"><strong>By:
+                                {{ project.user.username }}</strong></a>
                         <a href="{{project.url}}" class="btn btn-light btn-sm float-right">View project</a> <br>
                         <p></p>
                     </div>
@@ -20,7 +21,7 @@
                     </div>
                 </div>
 
-                
+
             </div>
             {% endif %}
 
@@ -64,9 +65,39 @@
 
                 <!-- Displaying reviews -->
                 <div class="reviews">
-                    <h3 class="text-center">Reviews</h3>
+                    <h3 class="text-center">Rating</h3>
+                    
                     <hr>
-                    {{avg_reviews.avg_rating}}
+                    <h4><strong>Average</strong></h4>
+                    <small> <strong>7/10{{avg_ratings }}</strong></small>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <h4><strong>Usability</strong></h4>
+                            <h5> <strong>{{avg_usability.avg_rating}}</strong></h5>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <h4><strong>Content</strong></h4>
+                            <h5> <strong>{{avg_content.avg_rating}}</strong></h5>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <h4><strong>Design</strong></h4>
+                            <h5> <strong>{{avg_design.avg_rating }}</strong></h5>
+                        </div>
+                    </div>
+
+
+                    <!-- <h2 class="text-center">Average rtyuio</h2>
+                    {{user}}
+                    <br>
+                    <span class="h3">Average: {{avg_ratings.avg_rating}}</span> <br>
+                    <span class="h3">Average reviews: {{avg_reviews}}</span> <br>
+                    <span class="h4">content Average: {{avg_content.avg_rating}}</span> <br>
+                    <span class="h4">usability Average: {{avg_usability.avg_rating}}</span> <br>
+                    <span class="h4">design Average: {{avg_design.avg_rating }}</span> <br> -->
+                    <h3 class="text-center bold">Reviews</h3>
+                    
+                
+                    <hr>
                     {% if reviews %}
                     {% for review in reviews %}
                     <div class="card m-3">
@@ -74,13 +105,33 @@
                             <!--review details -->
                             <blockquote class="blockquote ">
                                 <small class="text-left">{{review.review}}</small>
-                                <footer class="blockquote-footer text-right ">{{review.user.username}}
+                                <footer class="blockquote-footer text-right "> {{review.user.username}} <br>
                                     <cite title="Source Title">
-                                        {% for star in review.review_rating|ljust:review.review_rating %}
+                                        <strong><small>Content</small></strong>
+                                        {% for star in review.content_rating|ljust:review.content_rating %}
+
+                                        <i class="fa fa-star text-warning"></i>
+                                        {% endfor %}
+                                    </cite> <br>
+                                    <cite title="Source Title">
+                                        <strong><small>Usability</small></strong>
+                                        {% for star in review.usability_rating|ljust:review.usability_rating %}
+
+                                        <i class="fa fa-star text-warning"></i>
+                                        {% endfor %}
+                                    </cite>
+                                    <br>
+                                    <cite title="Source Title">
+                                        <strong><small>Design</small></strong>
+
+                                        {% for star in review.design_rating|ljust:review.design_rating %}
+
+
                                         <i class="fa fa-star text-warning"></i>
                                         {% endfor %}
 
                                     </cite>
+
                                 </footer>
                             </blockquote>
 

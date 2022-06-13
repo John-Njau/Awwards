@@ -1,0 +1,14 @@
+{% load bootstrap4 %} 
+{% load static %}
+<h1>Your Contacts</h1>
+{{user}}
+{{contacts}}
+{{profile}}
+<div class="container mt-3">
+    <form action="{%url 'contacts' user.id%}" method="post" enctype="multipart/form-data">
+      {%csrf_token%}
+  
+      {% bootstrap_form form %}
+      <input type="submit" class="btn btn-success btn-lg" value="Post">
+    </form>
+  </div>

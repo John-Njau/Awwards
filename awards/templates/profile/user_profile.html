@@ -1,23 +1,21 @@
 {% extends "base.html" %}
-
 {% block content %}
 <main>
     <section>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
-                    <h1 class="text-center text-success">Profile</h1>
-                    <img src="{{profile.profile_pic.url}}" class="img-fluid" alt="">
+                    <!-- <h1 class="text-center text-success">Profile</h1>
                     <h1>{{user.username}}</h1>
                     <p>{{user.email}}</p>
                     <p>{{user.last_name}}</p>
                     <p>{{user.password}}</p>
                     <p>{{user.bio}} <span></span></p>
-                    <p>{{user.project | length}}</p>
+                    <p>{{user.project | length}}</p> -->
 
 
                     <hr>
-                    <h2><strong>Profile details</strong></h2>
+                    <h2><strong>{{user.username}}'s Profile details</strong></h2>
                     <p><span><strong>Username</strong></span>: {{profile.user.username}} username</p>
                     <p><span><strong>email</strong></span>: {{profile.user.email}} email </p>
                     <p><span><strong>Bio:</strong></span> {{profile.bio}} </p>
@@ -27,43 +25,53 @@
                     <hr>
                     <div class="contacts">
                         <h2><strong>Contacts</strong></h2>
-                        {% for contact in contacts %}
+                        {% if contact %}
+                        <p><a href="{{contact.linkedin}}">Linkedin</a>
+                        </p>
+                        <a href=""></a>
+                        <a href=""></a>
+                        <a href=""></a>
+                        <a href=""></a>
                         <p>{{contact.github}}</p>
-                        <p>{{contact.linkedin}}</p>
                         <p>{{contact.twitter}}</p>
                         <p>{{contact.instagram}}</p>
-                        {% endfor %}
+
+                        {% else %}
+                        <p>No contact information</p>
+                        {% endif %}
                     </div>
 
-                    <div class="upload m-3">
-                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-success">Update profile</a>
-                    </div>
+                    <hr>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-6">
                     <h1 class="text-center text-success">Projects</h1>
                     <div>
-                        <p> User has {{projects | length}} projects</p>
+
+                        <!-- {{project}} -->
+                        <p> User has {{project| length}} projects</p>
+                        {% if project %}
 
                         <div>
-                            <h2>{{projects.name}}</h2>
+                            <h2>{{project.title}}</h2>
+                            <hr>
                             <p>{{project.description}}</p>
-                            <p>{{project.user.username}}</p>
+                            <!-- <p> {{project.user.username}}</p> -->
                             <p><img src="{{project.image.url}}" class="img-fluid" alt="">
                             </p>
                             <p>
                                 <a href="{{project.url}}">View Project</a></p>
                         </div>
 
-                        <div class="upload">
-                            <a href="{% url 'upload_project' %}" class="btn btn-success">Upload project</a>
-                        </div>
+                        {% else %}
+                        <p>No projects</p>
+                        {% endif %}
+
+
                     </div>
                 </div>
             </div>
     </section>
 
 </main>
-
-
-{% endblock %}
+{% endblock content %}

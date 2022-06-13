@@ -21,7 +21,13 @@ $("#addForm").submit(function (event) {
         _html += "<small>" + res.data.review + "</small>";
         _html += '<footer class="blockquote-footer">' + res.data.user;
         _html += '<cite title="Source Title">';
-        for (var i = 1; i <= res.data.review_rating; i++) {
+        for (var i = 1; i <= res.data.content_rating; i++) {
+          _html += '<i class="fa fa-star text-warning"></i>';
+        }
+        for (var i = 1; i <= res.data.usability_rating; i++) {
+          _html += '<i class="fa fa-star text-warning"></i>';
+        }
+        for (var i = 1; i <= res.data.design_rating; i++) {
           _html += '<i class="fa fa-star text-warning"></i>';
         }
         _html += "</cite>";

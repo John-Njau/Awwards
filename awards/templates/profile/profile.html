@@ -6,18 +6,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
-                    <h1 class="text-center text-success">Profile</h1>
-                    <img src="{{profile.profile_pic.url}}" class="img-fluid" alt="">
-                    <h1>{{user.username}}</h1>
-                    <p>{{user.email}}</p>
-                    <p>{{user.last_name}}</p>
-                    <p>{{user.password}}</p>
-                    <p>{{user.bio}} <span></span></p>
-                    <p>{{user.project | length}}</p>
 
+                    <div class="upload m-3">
+                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-success">Update profile</a>
+                    </div>
 
                     <hr>
-                    <h2><strong>Profile details</strong></h2>
+                    <h2><strong>Profile</strong></h2>
                     <p><span><strong>Username</strong></span>: {{profile.user.username}} username</p>
                     <p><span><strong>email</strong></span>: {{profile.user.email}} email </p>
                     <p><span><strong>Bio:</strong></span> {{profile.bio}} </p>
@@ -25,37 +20,44 @@
                     <img src="{{profile.profile_pic.url}}" class="img-fluid" alt="">
 
                     <hr>
+
                     <div class="contacts">
                         <h2><strong>Contacts</strong></h2>
-                        {% for contact in contacts %}
                         <p>{{contact.github}}</p>
                         <p>{{contact.linkedin}}</p>
                         <p>{{contact.twitter}}</p>
                         <p>{{contact.instagram}}</p>
-                        {% endfor %}
-                    </div>
 
-                    <div class="upload m-3">
-                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-success">Update profile</a>
+                        <div class="upload m-3">
+                            <a href="{% url 'contacts' user.id %}" class="btn btn-success">Add Contact Info</a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-md-6 col-lg-6">
-                    <h1 class="text-center text-success">Projects</h1>
+                    <h1 class="text-center text-success">My Projects</h1>
                     <div>
-                        <p> User has {{projects | length}} projects</p>
-
-                        <div>
-                            <h2>{{projects.name}}</h2>
+                        <p> User has {{project | length}} projects</p>
+                        {% if project%}
+                        <div class=" mb-5">
+                            <h2>{{project.title}}</h2>
+                            <hr>
                             <p>{{project.description}}</p>
-                            <p>{{project.user.username}}</p>
-                            <p><img src="{{project.image.url}}" class="img-fluid" alt="">
+                            <!-- <p>{{project.user.username}}</p> -->
+                            <p>
+                                <img src="{{project.image.url}}" class="img-fluid" alt="">
                             </p>
                             <p>
-                                <a href="{{project.url}}">View Project</a></p>
+                                <a class="float-left btn btn-dark btn-sm"
+                                    href="project/details/{{ project.id }} ">Project Details</a>
+                                <a class="float-right btn btn-dark btn-sm" href="{{project.url}}">View Project</a>
+                            </p>
                         </div>
-
-                        <div class="upload">
+                        {% else %}
+                        <p>No projects</p>
+                        {% endif %}
+                        <hr class="mt-2">
+                        <div class="upload mt-5 text-center">
                             <a href="{% url 'upload_project' %}" class="btn btn-success">Upload project</a>
                         </div>
                     </div>

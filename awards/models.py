@@ -71,26 +71,32 @@ class UserContacts(models.Model):
 #      (5, '5'),
 #  )]
 
-# Product Review
-RATING = (
-    (1, '1'),
-    (2,'2'), 
-    (3 ,'3'), 
-    (4,'4'),
-    (5, '5'),
-    (6,'6'),
-    (7,'7'),
-    (8,'8'),
-    (9,'9'),
-    (10,'10') 
-)
+# Project Review
+
 
 # @login_required(login_url='/accounts/login/')
 class Reviews(models.Model):
+    RATING = (
+        (1, '1'),
+        (2,'2'), 
+        (3 ,'3'), 
+        (4,'4'),
+        (5, '5'),
+        (6,'6'),
+        (7,'7'),
+        (8,'8'),
+        (9,'9'),
+        (10,'10') 
+    )
+    
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
-    review = HTMLField()
-    review_rating = models.CharField( choices=RATING,max_length=150)
+    review = models.TextField(blank=True, null=True)
+    design_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    usability_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    content_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    average_rating = models.DecimalField(default=0,blank=True, decimal_places=2, max_digits=2)
     # created_at = models.DateTimeField(auto_now_add=True)
     
     
@@ -104,14 +110,43 @@ class Reviews(models.Model):
     
     class Meta:
         verbose_name_plural = 'Reviews'
-    
+
+     
 
 # @login_required(login_url='/accounts/login/')
 class Ratings(models.Model):
+    RATING = (
+        (1, '1'),
+        (2,'2'), 
+        (3 ,'3'), 
+        (4,'4'),
+        (5, '5'),
+        (6,'6'),
+        (7,'7'),
+        (8,'8'),
+        (9,'9'),
+        (10,'10'),
+    )
+     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='ratings')
-    rating = models.IntegerField()
+    design_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    usability_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    content_rating = models.IntegerField( choices=RATING,default=0,blank=True)
+    average_rating = models.DecimalField(default=0,blank=True, decimal_places=2, max_digits=2)
     # created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    def save_rating(self, rating):
+        self.rating = rating
+        self.save()
+    
+    
+    @classmethod
+    def get_rating(cls, id):
+        ratings = Ratings.objects.filter(project_id=id).all
+        return ratings
+        
     
     def __str__(self):
         return self.user.username    
