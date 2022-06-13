@@ -35,7 +35,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = CloudinaryField('Awards/profiles')
     bio = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
     
     
     def get_user_projects(self):

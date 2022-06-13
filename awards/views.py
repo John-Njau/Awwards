@@ -39,11 +39,11 @@ def profile(request, userId):
 # def updateprofile(request, profileId):
 #     current_user = User.objects.get(pk=profileId)
 
-def updateprofile(request):
-    current_user = request.user
-    # user_profile =Profile.objects.get(pk=profileId)
+def updateprofile(request, userId):
+    # current_user = request.user
+    user_profile =User.objects.get(pk=userId)
     # profile_details = Profile.objects.filter(pk=current_user.id).first()
-    profile_details = Profile.objects.filter(id=current_user.id).first()
+    profile_details = Profile.objects.filter(user=user_profile).first()
     form = UpdateProfileForm()
     if request.method == 'POST':
         form = UpdateProfileForm(request.POST, request.FILES)
@@ -53,9 +53,9 @@ def updateprofile(request):
             profile.user = request.user
             profile.save()
         # return redirect('profile', profileId=profile.id)
-        return redirect('profile')
+        return redirect('profile',userId=profile.id)
     
-    return render(request, 'profile/updateprofile.html', {'form': form, 'profile':profile_details, 'current_user':current_user})
+    return render(request, 'profile/updateprofile.html', {'form': form, 'profile':profile_details, 'current_user':user_profile})
 
 # save review  
 def add_review(request, projectId):
