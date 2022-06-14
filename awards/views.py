@@ -131,7 +131,7 @@ def add_review(request, projectId):
     
     return JsonResponse({'bool':True, 'data':data, 'avg_ratings':avg_ratings})
 
-
+@login_required(login_url='/accounts/login/')
 def project_details(request, id):
     project = Project.objects.get(id=id)
     reviewForm = ProjectReviewForm()
