@@ -43,6 +43,21 @@
             </a>
         </div>
     </div>
+    <!-- {% for review in reviews %}
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.review }}</h5>
+                    <p class="card-text">{{ review.usability_rating }}</p>
+                    <p class="card-text"><small class="text-muted">{{ review.content_rating  }}</small></p>
+                    <p class="card-text"><small class="text-muted">{{ review.design_rating  }}</small></p>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %} -->
     <h3 class="text-center mt-5 mb-0">All projects</h3>
     <div class="project-cont">
 
@@ -60,8 +75,11 @@
                             project</a> </p>
             </div>
             <div class="card-footer bg-white">
-                <a href="" class=""><strong>By:
-                        {{ project.user.username }}</strong></a>
+                <a href="{% url 'other_user_profile' project.user.username %}" class="">
+                    <strong>By:
+                        {{ project.user.username }}</strong>
+                    </a>
+                    
 
             </div>
             <!-- <p>{{ project.description }}</p> -->

@@ -8,17 +8,16 @@
                     <h2><strong>{{user.username}}'s Profile details</strong></h2>
 
                     <hr>
-                    <img src="{{profile.profile_pic.url}}" class="img-fluid mb-2" alt=""
+                    <img src="{{request.user.profile.profile_pic.url}}" class="img-fluid mb-2" alt=""
                         style="max-width:140px;height:140px; border-radius:50%;">
-                    <p><span><strong>Username</strong></span>: {{profile.user.username}} username</p>
-                    <p><span><strong>Bio:</strong></span> {{profile.bio}} </p>
-                    <p><span><strong>email</strong></span>: {{profile.user.email}} email </p>
-
+                        <p><span><strong>Username</strong></span>: {{request.user.username}}</p>
+                        <p><span><strong>Bio:</strong></span> {{request.user.profile.bio}} </p>
+                        <p><span><strong>email</strong></span>: {{request.user.email}} </p>
 
                     <hr>
                     <div class="contacts">
                         <h2><strong>Contacts</strong></h2>
-                        {% if contact %}
+                        {% if user.contacts %}
                         <p><i class="fa-solid h4 fa-phone"></i> {{contact.phone_no}}</p>
                         <p> <a href="{{contact.github}}"> <i class="fa-brands h2 fa-github text-dark"></i></a>
                             <a href="{{contact.linkedin}}"> <i class="fa-brands h2 fa-linkedin"></i></a>
@@ -40,15 +39,15 @@
                     <div>
 
                         <!-- {{project}} -->
-                        <p> User has {{projects| length}} projects</p>
-                        {% if projects %}
-                        {% for project in projects %}
+                        <p> User has {{user.projects.all| length}} projects</p>
+                        {% if user.projects %}
+                        {% for project in user.projects.all %}
                         <div>
                             <h2>{{project.title}}</h2>
                             <hr>
                             <p>{{project.description}}</p>
                             <!-- <p> {{project.user.username}}</p> -->
-                            <p><img src="{{project.image.url}}" class="img-fluid" alt="">
+                            <p><img src="{{project.image.url}}" class="img-fluid" alt="" style="height:240px; border-radius:10px;">
                             </p>
                             
                                 <p>
