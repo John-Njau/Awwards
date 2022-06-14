@@ -1,10 +1,16 @@
-from django.db.models.functions import Cast
-from django.forms import IntegerField
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.db.models import Avg
 
-from .models import User, Profile, Project, UserContacts, Reviews
+from django.contrib.auth.decorators import login_required
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+from .serializers import ReviewSerializer, RatingsSerializer
+from .models import User, Profile, Project, UserContacts, Reviews, Ratings
 from .forms import ProjectForm, UpdateProfileForm, ProjectReviewForm, UserContactForm
 
 
@@ -12,9 +18,21 @@ from .forms import ProjectForm, UpdateProfileForm, ProjectReviewForm, UserContac
 def home(request):
     allprojects = Project.objects.all()
     reviews = Reviews.objects.all()
+    
+    
+    # fetch average rating for all reviews
+    # project = request.user.projects.get()
+    # project =allprojects.filter(current_project)
+
+    # avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
+    # avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
+    # avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
+    # avg_ratings=Reviews.objects.filter(project=project).aggregate(avg=Avg('usability_rating') + ('content_rating') +('design_rating'))
+
     context = {
         'projects': allprojects,
-        'reviews': reviews
+        'reviews': reviews,
+        
     }
     return render(request, 'main/home.html', context)
 
@@ -23,6 +41,8 @@ def home(request):
 
 # def profile(request, profileId):
 #     current_user = User.objects.get(pk=profileId)
+
+@login_required(login_url='/accounts/login/')
 def profile(request, userId):
     current_user = request.user
     user_projects = Project.objects.filter(user=current_user)
@@ -33,12 +53,12 @@ def profile(request, userId):
 
     context = {
         'profile': user_profile,
-        'project': user_projects,
+        'projects': user_projects,
         'contact': user_contacts
     }
     return render(request, 'profile/profile.html', context)
 
-
+@login_required(login_url='/accounts/login/')
 def other_user_profile(request, profileId):
     user = User.objects.get(pk=profileId)
     user_projects = Project.objects.filter(user=profileId)
@@ -49,7 +69,7 @@ def other_user_profile(request, profileId):
     context = {
         'user': user,
         'profile': user_profile,
-        'project': user_projects,
+        'projects': user_projects,
         'contact': user_contacts
     }
     
@@ -59,7 +79,7 @@ def other_user_profile(request, profileId):
 
     
     
-
+@login_required(login_url='/accounts/login/')
 def updateprofile(request, userId):
     # current_user = request.user
     user_profile =User.objects.get(pk=userId)
@@ -129,11 +149,11 @@ def project_details(request, id):
     reviews = Reviews.objects.filter(project=project)
     
     # fetch average rating for all reviews
-    avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating')*10)
-    avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating')*10)
-    avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating')*10)
-    # avg_ratings=Reviews.objects.filter(project=project).aggregate(avg=Avg('usability_rating') + ('content_rating') +('design_rating'))
-
+    avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
+    avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
+    avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
+    # avg_rating = Reviews.get_average_rating(project)
+    # print(avg_rating)
     # avg_reviews=Reviews.objects.filter(project=project).annotate(review_rating_int=Cast('review_rating', IntegerField()).aggregate(Avg('review_rating_int')))
     # avg_reviews=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('review_rating'))
     # avg_reviews = Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('average_rating')*100000000)
@@ -149,7 +169,7 @@ def project_details(request, id):
             'avg_usability':avg_usability,
             'avg_design':avg_design,
             # 'avg_reviews':avg_reviews,
-            # 'avg_ratings':avg_ratings,
+            # 'avg_rating':avg_rating,
             }
     
     return render(request, 'main/project_details.html', context)
@@ -170,7 +190,7 @@ def search_results(request):
     # data = Project.objects.filter(title__icontains=query).order_by('-id')
     # return render(request, 'search/search.html', {'data': data})
 
-
+@login_required(login_url='/accounts/login/')
 def upload_project(request):
     current_user = request.user
     if request.method == 'POST':
@@ -186,6 +206,7 @@ def upload_project(request):
     return render(request, 'main/upload_project.html', {'form': form})
 
 
+@login_required(login_url='/accounts/login/')
 def contacts(request, userId):
     user = User.objects.get(pk=userId)
     # profile = Profile.objects.filter(user=userId).first()
@@ -208,3 +229,33 @@ def contacts(request, userId):
     }
     
     return render(request, 'profile/contact-info.html', context)
+
+# API views
+
+class project_ratings(APIView):
+    def get(self, request, format=None):
+        all_ratings = Ratings.objects.all()
+        serializers = RatingsSerializer(all_ratings, many=True)
+        return Response(serializers.data)
+    
+    
+    def post(self, request, format=None):
+        serializers = RatingsSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class project_reviews(APIView):
+    def get(self, request, format=None):
+        all_reviews = Reviews.objects.all()
+        serializers = ReviewSerializer(all_reviews, many=True)
+        return Response(serializers.data)
+    
+    
+    def post(self, request, format=None):
+        serializers = ReviewSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

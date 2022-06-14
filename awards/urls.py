@@ -1,8 +1,5 @@
 from django.urls import path, re_path
-# from django.conf import settings
-# from django.conf.urls.static import static
-# from django.conf import settings
-# from django.conf.urls.static import static
+
 
 from . import views
 
@@ -19,7 +16,9 @@ urlpatterns = [
     path('upload/project/', views.upload_project, name='upload_project'),
     path('project/details/<int:id>', views.project_details, name='project_details'),
     path('add/review/<int:projectId>', views.add_review, name='add_review'),
-]
+    
+    # API endpoints
+    path('api/project/rating/', views.project_ratings.as_view(), name='project_rating'),
+    path('api/project/review/', views.project_reviews.as_view(), name='project_review'),
 
-# if settings.DEBUG:
-#     urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

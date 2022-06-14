@@ -34,13 +34,16 @@ $("#addForm").submit(function (event) {
         _html += "</footer>";
         _html += "</blockquote>";
         _html += "</hr>";
-        
+
         // prepend review to review section
         $(".review-list").prepend(_html);
 
-
         // hide modal
-        $('#productReview').modal('hide');
+        $("#productReview").modal("hide");
+
+
+        //hide modal
+        $("#modalhide").modal("hide");
       }
     },
   });

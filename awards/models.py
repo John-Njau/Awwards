@@ -12,7 +12,7 @@ import datetime as dt
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(max_length=255)
-    image = CloudinaryField('Awards/project_images')
+    image = CloudinaryField('project image')
     description = HTMLField()
     url = models.URLField(blank=False)
     # uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -66,17 +66,6 @@ class UserContacts(models.Model):
     def __str__(self):
         return self.user.username
     
-#  Project review   
-#  RATING=[(
-#      (1, '1'),
-#      (2, '2'),
-#      (3, '3'),
-#      (4, '4'),
-#      (5, '5'),
-#  )]
-
-# Project Review
-
 
 # @login_required(login_url='/accounts/login/')
 class Reviews(models.Model):
@@ -104,8 +93,20 @@ class Reviews(models.Model):
     # created_at = models.DateTimeField(auto_now_add=True)
     
     
-    def get_review_rating(self):
-        return self.review_rating
+    def get_usability_rating(self):
+        return self.usability_rating
+    
+    def get_content_rating(self):
+        return self.content_rating
+    
+    def get_design_rating(self):
+        return self.design_rating
+    
+    @classmethod
+    def get_average_rating(self):
+        design_rating = self.design_rating
+        avg = (design_rating + self.usability_rating + self.content_rating) / 3
+        return avg
         
     
     def __str__(self):

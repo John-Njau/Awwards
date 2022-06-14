@@ -1,18 +1,29 @@
 serve:
-	python manage.py runserver 8000
+	python3 manage.py runserver 8000
 
 migrations:
-	python manage.py makemigrations awards
-	python manage.py migrate awards
+	python3 manage.py makemigrations awards
+
+migrate:
+	python3 manage.py migrate awards
 
 super:
-	python manage.py createsuperuser
+	python3 manage.py createsuperuser
 
 shell:
-	Python manage.py shell
+	Python3 manage.py shell
 
 tests: 
-	python manage.py test
+	python3 manage.py test
 
 check: 
-	python manage.py check awards
+	python3 manage.py check awards
+
+migrateheroku: 
+	heroku run python3 manage.py migrate
+
+heroku:
+	heroku create
+
+push: 
+	git push heroku master

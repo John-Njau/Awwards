@@ -6,28 +6,33 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 mb-5 text-center">
-                    <div class="upload m-3">
-                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-primary">Update profile</a>
-                    </div>
+                    {% if user.profile %}
                     <hr>
                     <h2><strong>Profile</strong></h2>
                     <img src="{{profile.profile_pic.url}}" class="img-fluid mb-2" alt="" style="max-width:140px;height:140px; border-radius:50%;">
                     <p><span><strong>Username</strong></span>: {{profile.user.username}}</p>
                     <p><span><strong>Bio:</strong></span> {{profile.bio}} </p>
                     <p><span><strong>email</strong></span>: {{profile.user.email}} </p>
-
+                    {%else %}
+                    <div class="upload m-3">
+                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-primary">Add profile info</a>
+                    </div>
                     <hr>
+                    {% endif %}
 
                     <div class="contacts">
                         <h2><strong>Contacts</strong></h2>
+                        {% if contact %}
                         <p><i class="fa-solid h4 fa-phone"></i> {{contact.phone_no}}</p>
                         <p> <a href="{{contact.github}}"> <i class="fa-brands h2 fa-github text-dark"></i></a>
                             <a href="{{contact.linkedin}}"> <i class="fa-brands h2 fa-linkedin"></i></a>
                             <a href="{{contact.twitter}}"> <i class="fa-brands h2 fa-twitter"></i></a>
                             <a href="{{contact.email}}"> <i class="fa-solid h2 fa-envelope text-danger"></i></a> </p>
+                        {% else %}
                         <div class="upload m-3">
                             <a href="{% url 'contacts' user.id %}" class="btn btn-primary">Add Contact Info</a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
