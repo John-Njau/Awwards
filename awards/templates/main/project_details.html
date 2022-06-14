@@ -10,7 +10,7 @@
                     <h1>{{project.title}}</h1>
                     <img src="{{project.image.url}}" alt="" class="img-fluid">
                     <div class="ml-3 mt-3 p-5">
-                        <a href="{% url 'other_user_profile' user.id %}" class="float-left mt-3 mx-3 h4"><strong>By:
+                        <a href="{% url 'other_user_profile' project.user.username %}" class="float-left mt-3 mx-3 h4"><strong>By:
                                 {{ project.user.username }}</strong></a>
                         <a href="{{project.url}}" class="btn btn-light btn-sm float-right">View project</a> <br>
                         <p></p>

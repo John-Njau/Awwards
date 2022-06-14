@@ -8,11 +8,11 @@
                     <h2><strong>{{user.username}}'s Profile details</strong></h2>
 
                     <hr>
-                    <img src="{{request.user.profile.profile_pic.url}}" class="img-fluid mb-2" alt=""
+                    <img src="{{user.profile.profile_pic.url}}" class="img-fluid mb-2" alt=""
                         style="max-width:140px;height:140px; border-radius:50%;">
-                        <p><span><strong>Username</strong></span>: {{request.user.username}}</p>
-                        <p><span><strong>Bio:</strong></span> {{request.user.profile.bio}} </p>
-                        <p><span><strong>email</strong></span>: {{request.user.email}} </p>
+                        <p><span><strong>Username</strong></span>: {{user.username}}</p>
+                        <p><span><strong>Bio:</strong></span> {{user.profile.bio}} </p>
+                        <p><span><strong>email</strong></span>: {{user.email}} </p>
 
                     <hr>
                     <div class="contacts">
