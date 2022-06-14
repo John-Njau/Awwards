@@ -38,6 +38,10 @@ class Profile(models.Model):
     # created_at = models.DateTimeField(auto_now_add=True)
     
     
+    def save_profile(self):
+       
+        self.save()
+    
     def get_user_projects(self):
         return self.projects.all()
     
