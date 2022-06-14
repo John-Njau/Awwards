@@ -149,9 +149,9 @@ def project_details(request, id):
     reviews = Reviews.objects.filter(project=project)
     
     # fetch average rating for all reviews
-    avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
-    avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
-    avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
+    avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating').toFixed(2))
+    avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating').toFixed(2))
+    avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating').toFixed(2))
     # avg_rating = Reviews.get_average_rating(project)
     # print(avg_rating)
     # avg_reviews=Reviews.objects.filter(project=project).annotate(review_rating_int=Cast('review_rating', IntegerField()).aggregate(Avg('review_rating_int')))
