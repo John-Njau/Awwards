@@ -20,6 +20,16 @@
                 <div class="carousel-item">
                     {% endif %}
                     <img src="{{project.image.url}}" class="d-block  img-fluid" alt="..." height="50vh">
+                    <div class="carousel-caption d-none d-md-block">
+
+                        <p class="h4 text-light bold fw-5 fs-1"> {{project.title}}</p>
+                            <!-- Rated <br> -->
+                            <!-- <span class="avg border"><strong class="avg-span">Usability : 7.90 {{avg_usability.avg_rating}} </strong></span> |
+                            <span><strong class="avg-span">Content : 7.90</strong></span> |
+                            <span><strong class="avg-span">Design: 7.90</strong></span></p> --> 
+
+
+                    </div>
                 </div>
                 {% endfor %}
             </div>
