@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.db.models import Avg
+
 
 from django.contrib.auth.decorators import login_required
 
@@ -20,15 +21,6 @@ def home(request):
     reviews = Reviews.objects.all()
     
     
-    # fetch average rating for all reviews
-    # project = request.user.projects.get()
-    # project =allprojects.filter(current_project)
-
-    # avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
-    # avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
-    # avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
-    # avg_ratings=Reviews.objects.filter(project=project).aggregate(avg=Avg('usability_rating') + ('content_rating') +('design_rating'))
-
     context = {
         'projects': allprojects,
         'reviews': reviews,
@@ -36,67 +28,78 @@ def home(request):
     }
     return render(request, 'main/home.html', context)
 
-# def upload_project(request):
-#     return render(request, 'main/upload_project.html')
-
-# def profile(request, profileId):
-#     current_user = User.objects.get(pk=profileId)
 
 @login_required(login_url='/accounts/login/')
-def profile(request, userId):
-    current_user = request.user
-    user_projects = Project.objects.filter(user=current_user)
-    user_profile =Profile.objects.filter(user=userId).first()
-    user_contacts = UserContacts.objects.filter(user=userId).first()
-
-    # ind_profile =User.objects.get(pk=current_user)
-
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    
     context = {
-        'profile': user_profile,
-        'projects': user_projects,
-        'contact': user_contacts
+        'user': user,
+       
     }
+    
     return render(request, 'profile/profile.html', context)
 
+
 @login_required(login_url='/accounts/login/')
-def other_user_profile(request, profileId):
-    user = User.objects.get(pk=profileId)
-    user_projects = Project.objects.filter(user=profileId)
-    user_profile =Profile.objects.filter(user=profileId).first()
-    # ind_profile =User.objects.get(pk=current_user)
-    user_contacts = UserContacts.objects.filter(user=profileId).first()
+def other_user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    user_projects = Project.objects.filter(user=user)
 
     context = {
         'user': user,
-        'profile': user_profile,
-        'projects': user_projects,
-        'contact': user_contacts
+        'project': user_projects,
     }
-    
-    
     
     return render(request, 'profile/user_profile.html', context)
 
     
     
 @login_required(login_url='/accounts/login/')
-def updateprofile(request, userId):
-    # current_user = request.user
-    user_profile =User.objects.get(pk=userId)
-    # profile_details = Profile.objects.filter(pk=current_user.id).first()
-    profile_details = Profile.objects.filter(user=user_profile).first()
-    form = UpdateProfileForm()
+def updateprofile(request, username):
+    user = get_object_or_404(User, username=username)
+    user_profile = Profile.objects.get(id=user.id)
+    
     if request.method == 'POST':
-        form = UpdateProfileForm(request.POST, request.FILES)
-        
+        form = UpdateProfileForm(request.POST, request.FILES, instance=user_profile)
+
         if form.is_valid():
             profile = form.save(commit=False)
-            profile.user = request.user
+            profile.user = user
             profile.save()
-        # return redirect('profile', profileId=profile.id)
-        return redirect('profile',userId=profile.id)
+        return redirect('profile', username)
     
-    return render(request, 'profile/updateprofile.html', {'form': form, 'profile':profile_details, 'current_user':user_profile})
+    else:
+        form = UpdateProfileForm()
+
+    return render(request, 'profile/updateprofile.html',
+                  {'form': form, 
+                   'profile': user_profile, 
+                   'current_user': user_profile})
+
+    # user = get_object_or_404(User, username=username)
+    # user_profile =Project.objects.get(id=user.id)
+
+    # if request.method == 'POST':
+    #     form = UpdateProfileForm(request.POST, request.FILES, instance=user_profile)
+        
+    #     if form.is_valid():
+    #         profile = form.save(commit=False)
+    #         profile.user = user
+    #         profile.save()
+    #     return redirect('profile',username)
+    
+    # else:
+    #     form = UpdateProfileForm()
+        
+        
+    # context = {
+    #     'form': form, 
+    #     'profile':user_profile, 
+        
+    # }
+    
+    # return render(request, 'profile/updateprofile.html', context)
 
 
 # save review  
@@ -116,7 +119,7 @@ def add_review(request, projectId):
     avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
     avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
     avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
-    avg_ratings=(avg_usability + avg_content + avg_design)/3
+    # avg_ratings=(avg_usability + avg_content + avg_design)/3
 
 
     
@@ -129,13 +132,12 @@ def add_review(request, projectId):
         
     }
     
-    return JsonResponse({'bool':True, 'data':data, 'avg_ratings':avg_ratings})
+    return JsonResponse({'bool':True, 'data':data})
 
 @login_required(login_url='/accounts/login/')
 def project_details(request, id):
     project = Project.objects.get(id=id)
     reviewForm = ProjectReviewForm()
-    # reviews = Reviews.objects.filter(project=id)
     
     # check
     canAdd =True
@@ -152,11 +154,6 @@ def project_details(request, id):
     avg_usability=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('usability_rating'))
     avg_content=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('content_rating'))
     avg_design=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('design_rating'))
-    # avg_rating = Reviews.get_average_rating(project)
-    # print(avg_rating)
-    # avg_reviews=Reviews.objects.filter(project=project).annotate(review_rating_int=Cast('review_rating', IntegerField()).aggregate(Avg('review_rating_int')))
-    # avg_reviews=Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('review_rating'))
-    # avg_reviews = Reviews.objects.filter(project=project).aggregate(avg_rating=Avg('average_rating')*100000000)
 
   
     context = {
@@ -168,8 +165,7 @@ def project_details(request, id):
             'avg_content':avg_content,
             'avg_usability':avg_usability,
             'avg_design':avg_design,
-            # 'avg_reviews':avg_reviews,
-            # 'avg_rating':avg_rating,
+           
             }
     
     return render(request, 'main/project_details.html', context)
@@ -209,15 +205,16 @@ def upload_project(request):
 @login_required(login_url='/accounts/login/')
 def contacts(request, userId):
     user = User.objects.get(pk=userId)
-    # profile = Profile.objects.filter(user=userId).first()
-    # contacts = UserContacts.objects.filter(user=profile).first()
+    user_contacts = UserContacts.objects.get(id=user.id)
+    
     if request.method == 'POST':
         form = UserContactForm(request.POST, request.FILES)
+        
         if form.is_valid():
             contact = form.save(commit=False)
             contact.user = user
             contact.save()
-        return redirect('profile', userId=user.id)
+        return redirect('profile', user.username)
     
     else:
         form = UserContactForm()
