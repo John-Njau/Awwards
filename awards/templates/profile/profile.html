@@ -20,7 +20,7 @@
                     </div>
                     {%else %}
                     <div class="upload m-3">
-                        <a href="{% url 'updateprofile' user.id %}" class="btn btn-primary">Add profile info</a>
+                        <a href="{% url 'updateprofile' user.username %}" class="btn btn-primary">Add profile info</a>
                     </div>
                     <hr>
                     {% endif %}
@@ -31,7 +31,6 @@
                         <h2><strong>Contacts</strong></h2>
                         {% if user.contacts %}
                         {% for contact in user.contacts.all|slice:"0:1" %}
-
                         <p><i class="fa-solid h4 fa-phone"></i> {{contact.phone_no}}</p>
                         <p> <a href="{{contact.github}}"> <i class="fa-brands h2 fa-github text-dark"></i></a>
                             <a href="{{contact.linkedin}}"> <i class="fa-brands h2 fa-linkedin"></i></a>
@@ -42,6 +41,7 @@
                                 Info</a>
                         </div>
                         {% endfor %}
+                        
                         {% else %}
                         <p>No contact information</p>
                         <div class="upload m-3">
